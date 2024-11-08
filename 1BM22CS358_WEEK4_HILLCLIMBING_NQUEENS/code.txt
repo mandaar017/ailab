@@ -1,0 +1,56 @@
+# Function to print the board
+def print_board(board):
+    n = len(board)
+    for i in range(n):
+        row = ['.'] * n
+        if board[i] != -1:
+            row[board[i]] = 'Q'
+        print(' '.join(row))
+    print("\n")
+
+# Function to check if a queen can be placed at the given column
+def is_safe(board, row, col):
+    for i in range(col):
+        if board[i] == row or abs(board[i] - row) == abs(i - col):
+            return False
+    return True
+
+# Backtracking function to solve the N-Queens problem with step-by-step display
+def solve_n_queens_util(board, col, n):
+    if col >= n:
+        return True
+    
+    for i in range(n):
+        if is_safe(board, i, col):
+            board[col] = i
+            print(f"Placing queen at column {col}, row {i}:")
+            print_board(board)
+            
+            if solve_n_queens_util(board, col + 1, n):
+                return True
+            
+            # Backtrack
+            print(f"Backtracking from column {col}, row {i}:")
+            board[col] = -1
+            print_board(board)
+    return False
+
+# Main function to find a solution for the N-Queens problem with step-by-step explanation
+def solve_n_queens(n):
+    board = [-1] * n
+    if solve_n_queens_util(board, 0, n):
+        print("Solution found:")
+        print_board(board)
+    else:
+        print("No solution exists.")
+
+# Run the function with user input
+try:
+    n = int(input("Enter the number of queens (N): ").strip())
+    if n <= 0:
+        print("The number of queens must be a positive integer.")
+    else:
+        solve_n_queens(n)
+except ValueError:
+    print("Invalid input. Please enter a valid positive integer.")
+
